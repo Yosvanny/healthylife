@@ -1,13 +1,82 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>inicio</ion-title>
+    <ion-title>Inicio</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">inicio</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <h2>Bienvenido a HealthyLife</h2>
+  <p>Resumen del {{ fecha | date: 'dd/MM/yyyy' }}</p>
+
+  @if (esEjemplo) {
+  <ion-badge color="warning">Datos de ejemplo</ion-badge>
+  }
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title
+        ><ion-icon name="moon-outline"></ion-icon> Sueño</ion-card-title
+      >
+    </ion-card-header>
+    <ion-card-content
+      >{{ formatearMinutos(resumen.suenoMinutos) }}</ion-card-content
+    >
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title
+        ><ion-icon name="water-outline"></ion-icon> Agua</ion-card-title
+      >
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        {{ resumen.aguaMl }} / {{ resumen.metaAguaMl }} ml ({{ porcentajeAgua }}
+        %)
+      </p>
+      <ion-progress-bar [value]="progresoAgua"></ion-progress-bar>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title
+        ><ion-icon name="restaurant-outline"></ion-icon>
+        Alimentación</ion-card-title
+      >
+    </ion-card-header>
+    <ion-card-content>
+      {{ resumen.comidasRegistradas }} comidas · {{ resumen.caloriasEstimadas }}
+      kcal estimadas
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title
+        ><ion-icon name="walk-outline"></ion-icon> Actividad
+        física</ion-card-title
+      >
+    </ion-card-header>
+    <ion-card-content
+      >{{ formatearMinutos(resumen.actividadMinutos) }}</ion-card-content
+    >
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title
+        ><ion-icon name="hourglass-outline"></ion-icon> Tiempo
+        sentado</ion-card-title
+      >
+    </ion-card-header>
+    <ion-card-content
+      >{{ formatearMinutos(resumen.sedentarioMinutos) }}</ion-card-content
+    >
+  </ion-card>
+
+  <p class="aviso">
+    HealthyLife es una herramienta de registro de hábitos y no sustituye la
+    orientación de profesionales de la salud.
+  </p>
 </ion-content>
