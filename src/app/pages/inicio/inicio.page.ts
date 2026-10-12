@@ -21,6 +21,7 @@ import {
   walkOutline,
   hourglassOutline,
 } from 'ionicons/icons';
+import { ResumenDia } from '../../models/resumen-dia.model';
 
 @Component({
   selector: 'app-inicio',
@@ -47,9 +48,10 @@ export class InicioPage {
   // ⚠️ DATOS DE EJEMPLO: se reemplazarán por los datos reales de la API
   // cuando implementemos la base de datos y los servicios.
   esEjemplo = true;
-  resumen = {
+  resumen: ResumenDia = {
     suenoMinutos: 450,
     aguaMl: 1250,
+    bebidasTotalMl: 1750,
     metaAguaMl: 2000,
     comidasRegistradas: 2,
     caloriasEstimadas: 1350,
