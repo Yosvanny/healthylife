@@ -48,3 +48,19 @@ set_exception_handler(function (Throwable $e): void {
     error_log('HealthyLife API: ' . $e->getMessage());
     responderError('Error interno del servidor', 500);
 });
+
+// CORS: permite que la app (ionic serve en localhost:8100) llame a la API desde el navegador.
+$origenesPermitidos = ['http://localhost:8100'];
+$origen = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (in_array($origen, $origenesPermitidos, true)) {
+    header('Access-Control-Allow-Origin: ' . $origen);
+    header('Vary: Origin');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+}
+
+// Peticion previa (preflight): el navegador pregunta si puede enviar la peticion real.
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
