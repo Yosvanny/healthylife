@@ -8,14 +8,11 @@ require __DIR__ . '/auth.php';
 exigirMetodo('POST');
 
 $cuerpo = leerCuerpoJson();
-$nombre = trim((string) ($cuerpo['nombre'] ?? ''));
 $email = strtolower(trim((string) ($cuerpo['email'] ?? '')));
 $password = (string) ($cuerpo['password'] ?? '');
 
 // Validaciones (los limites coinciden con las columnas de la tabla usuarios).
-if ($nombre === '' || mb_strlen($nombre) > 100) {
-    responderError('El nombre es obligatorio y debe tener máximo 100 caracteres');
-}
+$nombre = validarNombre($cuerpo['nombre'] ?? '');
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 150) {
     responderError('El correo electrónico no es válido');
 }

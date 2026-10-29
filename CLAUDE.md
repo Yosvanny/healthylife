@@ -1,6 +1,6 @@
 # HealthyLife — contexto para Claude Code
 
-Actualizado: 29/10/2026 (paso 9-B.5 terminado; hoja de ruta ajustada a los bloques de entrega).
+Actualizado: 29/10/2026 (pasos 9-B.5 y 9-B.6 terminados; API de autenticacion completa).
 
 ## Tu papel y modo de trabajo
 
@@ -88,12 +88,18 @@ mediante API en PHP.
 - Formato de respuesta: `{"ok":true,"datos":{...}}` o `{"ok":false,"error":"..."}`.
 - `api/index.php`: punto de prueba GET -> {mensaje, php, tablas}.
 - `api/auth.php`: `formatearUsuario($fila)` (snake_case -> camelCase, sin password_hash),
-  `crearSesion($usuarioId): string` (token; guarda el hash; DIAS_SESION = 30).
-  Requiere conexion.php cargado antes.
+  `crearSesion($usuarioId): string` (token; guarda el hash; DIAS_SESION = 30),
+  `validarNombre($valor): string` (1-100 caracteres), `obtenerTokenHash(): string` (lee
+  Authorization Bearer de 64 hex, con respaldo getallheaders; 401 si falta) y
+  `exigirUsuario(): array` (fila de usuarios con sesion vigente; 401 si no existe o expiro).
+  Requiere conexion.php cargado antes. **Todo endpoint protegido llama `exigirUsuario()`.**
 - `api/registro.php` (POST nombre, email, password): valida nombre 1-100, email valido <=150,
   password 8-72; email en minusculas; 409 si el correo existe; 201 {token, usuario}.
 - `api/login.php` (POST email, password): 401 "Correo o contrasena incorrectos" (mismo
   mensaje si el correo no existe); 200 {token, usuario}.
+- `api/perfil.php`: GET -> {usuario}; PUT {nombre?, metaAguaMl?} (meta entera 250-10000;
+  el campo que no se envia se conserva) -> {usuario}. Otros metodos 405.
+- `api/logout.php` (POST con token): borra la fila de sesiones; 401 si ya no existia.
 - Usuario de prueba: prueba1793253526@ejemplo.com / secreta123 (id 4).
 
 ## Base de datos (database/healthylife.sql, 86 lineas, IF NOT EXISTS, sin DROP)
@@ -106,9 +112,8 @@ src/app/models con su tabla antes de escribir endpoints.
 
 ## Ultimos commits (main, origin = github.com/Yosvanny/healthylife)
 
-b3a558f registro e inicio de sesion · 70c1e50 tabla sesiones · 635ebc0 CORS ·
-1027cd5 utilidades JSON y errores · 9295c9f configuracion y conexion PDO
-(b3a558f aun sin push al 29/10/2026.)
+6068e72 CLAUDE.md como evidencia · b3a558f registro e inicio de sesion ·
+70c1e50 tabla sesiones · 635ebc0 CORS · 1027cd5 utilidades JSON y errores
 
 ## Bloques de entrega del profesor (sin fechas; seguir la hoja de ruta en orden)
 
@@ -122,14 +127,13 @@ b3a558f registro e inicio de sesion · 70c1e50 tabla sesiones · 635ebc0 CORS ·
 5. Version 1.0: todo lo anterior + APK o ejecucion demostrable, video <= 5 min, README,
    bitacora de IA.  -> pasos 19-23.
 
-## HOJA DE RUTA (siguiente: 9-B paso 6)
+## HOJA DE RUTA (siguiente: paso 7)
 
 B. Autenticacion
   5. HECHO (b3a558f): registro.php y login.php, probados con curl.
-  6. **SIGUIENTE:** funcion para validar el token (leer Authorization) y endpoint de perfil
-     (obtener/actualizar nombre y meta de agua); endpoint de cerrar sesion.
+  6. HECHO: exigirUsuario, perfil.php y logout.php, probados con curl (incluye token vencido).
 C. App: conexion y login
-  7. HttpClient en main.ts (forma correcta de Angular 22) y URL de la API en environments.
+  7. **SIGUIENTE:** HttpClient en main.ts (forma correcta de Angular 22) y URL de la API en environments.
   8. Servicio de autenticacion (token guardado con @capacitor/preferences), paginas /login y
      /registro-usuario fuera de tabs, guard e interceptor que envia el token.
 D. Registros diarios (API + servicio + pantalla, uno por uno)
