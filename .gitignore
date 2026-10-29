@@ -68,3 +68,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Configuracion real de la API (no subir)
+/api/config.php
