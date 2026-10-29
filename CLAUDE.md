@@ -112,8 +112,8 @@ src/app/models con su tabla antes de escribir endpoints.
 
 ## Ultimos commits (main, origin = github.com/Yosvanny/healthylife)
 
-64ee145 token, perfil y cierre de sesion · 6068e72 CLAUDE.md como evidencia ·
-b3a558f registro e inicio de sesion · 70c1e50 tabla sesiones · 635ebc0 CORS
+072355b HttpClient y apiUrl (sin push) · 64ee145 token, perfil y cierre de sesion ·
+6068e72 CLAUDE.md como evidencia · b3a558f registro e inicio de sesion
 
 ## Bloques de entrega del profesor (sin fechas; seguir la hoja de ruta en orden)
 
@@ -134,8 +134,21 @@ b3a558f registro e inicio de sesion · 70c1e50 tabla sesiones · 635ebc0 CORS
 - `src/environments/environment(.prod).ts`: `apiUrl: 'http://localhost/healthylife-api'`
   (sin diagonal final). Uso: `` `${environment.apiUrl}/login.php` ``.
 - Compila con `npx ng build --configuration development` (salida en www/, ignorada).
+  OJO: `tsc -p tsconfig.app.json` solo revisa lo alcanzable desde main.ts; un servicio que
+  aun no usa ninguna pantalla se prueba con su .spec.ts.
+- Pruebas: `npx ng test --watch=false` (Vitest). Una sola: `--include <ruta del spec>`.
+  `tabs.page.spec.ts` falla desde aca38fb (le falta `provideRouter([])`), pendiente de arreglar.
+- `@capacitor/preferences` 8.0.1 (exacta) instalada.
+- `models/respuesta-api.model.ts`: `RespuestaExito<T>`, `RespuestaError`, `SesionIniciada`.
+- `services/mensaje-error.ts`: `mensajeDeError(error)` -> texto para el usuario (status 0 =
+  sin conexion; si no, el `error` de la API; si no, mensaje generico).
+- `services/auth.service.ts` (providedIn root): signals `usuario` y `haySesion`;
+  `registrar`, `iniciarSesion`, `cargarSesion(): Promise<boolean>` (lee token de Preferences
+  clave `healthylife_token` y valida con perfil.php), `cerrarSesion`, `obtenerToken`.
+  Metodos async con `firstValueFrom`. 8 pruebas en `auth.service.spec.ts` (API simulada).
+  Pendiente 15-A: si no hay conexion, cargarSesion no debe borrar la sesion.
 
-## HOJA DE RUTA (siguiente: paso 8)
+## HOJA DE RUTA (siguiente: paso 8-B)
 
 B. Autenticacion
   5. HECHO (b3a558f): registro.php y login.php, probados con curl.
@@ -143,8 +156,12 @@ B. Autenticacion
 C. App: conexion y login
   7. HECHO: HttpClient en main.ts y apiUrl en environments (probado solo compilando; la
      primera peticion real desde el navegador se prueba en el paso 8).
-  8. **SIGUIENTE:** Servicio de autenticacion (token guardado con @capacitor/preferences), paginas /login y
-     /registro-usuario fuera de tabs, guard e interceptor que envia el token.
+  8. **EN CURSO:** dividido en tres partes.
+     8-A. HECHO: AuthService con token en Preferences (probado con Vitest).
+     8-B. **SIGUIENTE:** paginas /login y /registro-usuario fuera de tabs (primera prueba real
+          en el navegador con ionic serve, incluye CORS).
+     8-C. Guard (sin sesion -> /login) e interceptor que envia el token
+          (`provideHttpClient(withInterceptors([...]))`).
 D. Registros diarios (API + servicio + pantalla, uno por uno)
   9. Pestana Registro: menu de tipos y formularios.  10. Hidratacion.  11. Sueno (duracion
   aunque cruce medianoche).  12. Alimentacion.  13. Actividad y sedentario.
@@ -174,3 +191,7 @@ J. 21. README.md.  22. Capturas, video (<= 5 min) y evidencia de prompts.
 - 29/10/2026: CLAUDE.md decia que 70c1e50 ya existia y el snapshot de git status lo
   mostraba como pendiente; se verifico con `git log` antes de actuar. El "bloque 4" del
   profesor era identico al 3; se detecto y se aclaro con el usuario.
+- 29/10/2026: `tsc` dio OK pero no revisaba AuthService (no alcanzable desde main.ts); se
+  detecto y se probo con Vitest. Al correr las pruebas aparecio que tabs.page.spec.ts ya
+  fallaba desde aca38fb (falta provideRouter). npm 11 muestra avisos `install-scripts` de
+  paquetes ya existentes (esbuild, lmdb); no afectan la compilacion.
