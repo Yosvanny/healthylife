@@ -1,6 +1,6 @@
 # HealthyLife — contexto para Claude Code
 
-Actualizado: 29/10/2026 (pasos 9-B.5 y 9-B.6 terminados; API de autenticacion completa).
+Actualizado: 29/10/2026 (pasos 5, 6 y 7 terminados; siguiente: paso 8, login en la app).
 
 ## Tu papel y modo de trabajo
 
@@ -112,8 +112,8 @@ src/app/models con su tabla antes de escribir endpoints.
 
 ## Ultimos commits (main, origin = github.com/Yosvanny/healthylife)
 
-6068e72 CLAUDE.md como evidencia · b3a558f registro e inicio de sesion ·
-70c1e50 tabla sesiones · 635ebc0 CORS · 1027cd5 utilidades JSON y errores
+64ee145 token, perfil y cierre de sesion · 6068e72 CLAUDE.md como evidencia ·
+b3a558f registro e inicio de sesion · 70c1e50 tabla sesiones · 635ebc0 CORS
 
 ## Bloques de entrega del profesor (sin fechas; seguir la hoja de ruta en orden)
 
@@ -127,14 +127,23 @@ src/app/models con su tabla antes de escribir endpoints.
 5. Version 1.0: todo lo anterior + APK o ejecucion demostrable, video <= 5 min, README,
    bitacora de IA.  -> pasos 19-23.
 
-## HOJA DE RUTA (siguiente: paso 7)
+## Estado actual de la app
+
+- `src/main.ts`: `provideHttpClient()` (sin `withFetch`, obsoleto en Angular 22: fetch ya
+  es el predeterminado). En el paso 8 se agrega `withInterceptors([...])`.
+- `src/environments/environment(.prod).ts`: `apiUrl: 'http://localhost/healthylife-api'`
+  (sin diagonal final). Uso: `` `${environment.apiUrl}/login.php` ``.
+- Compila con `npx ng build --configuration development` (salida en www/, ignorada).
+
+## HOJA DE RUTA (siguiente: paso 8)
 
 B. Autenticacion
   5. HECHO (b3a558f): registro.php y login.php, probados con curl.
   6. HECHO: exigirUsuario, perfil.php y logout.php, probados con curl (incluye token vencido).
 C. App: conexion y login
-  7. **SIGUIENTE:** HttpClient en main.ts (forma correcta de Angular 22) y URL de la API en environments.
-  8. Servicio de autenticacion (token guardado con @capacitor/preferences), paginas /login y
+  7. HECHO: HttpClient en main.ts y apiUrl en environments (probado solo compilando; la
+     primera peticion real desde el navegador se prueba en el paso 8).
+  8. **SIGUIENTE:** Servicio de autenticacion (token guardado con @capacitor/preferences), paginas /login y
      /registro-usuario fuera de tabs, guard e interceptor que envia el token.
 D. Registros diarios (API + servicio + pantalla, uno por uno)
   9. Pestana Registro: menu de tipos y formularios.  10. Hidratacion.  11. Sueno (duracion

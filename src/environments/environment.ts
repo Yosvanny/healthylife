@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // URL base de la API de PHP (alias de Apache en XAMPP). Sin diagonal al final.
+  apiUrl: 'http://localhost/healthylife-api',
 };
 
 /*
