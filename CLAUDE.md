@@ -112,8 +112,9 @@ src/app/models con su tabla antes de escribir endpoints.
 
 ## Ultimos commits (main, origin = github.com/Yosvanny/healthylife)
 
-072355b HttpClient y apiUrl (sin push) · 64ee145 token, perfil y cierre de sesion ·
-6068e72 CLAUDE.md como evidencia · b3a558f registro e inicio de sesion
+294fb54 AuthService con Preferences · 072355b HttpClient y apiUrl ·
+64ee145 token, perfil y cierre de sesion · 6068e72 CLAUDE.md como evidencia
+(072355b y 294fb54 sin push.)
 
 ## Bloques de entrega del profesor (sin fechas; seguir la hoja de ruta en orden)
 
@@ -137,7 +138,8 @@ src/app/models con su tabla antes de escribir endpoints.
   OJO: `tsc -p tsconfig.app.json` solo revisa lo alcanzable desde main.ts; un servicio que
   aun no usa ninguna pantalla se prueba con su .spec.ts.
 - Pruebas: `npx ng test --watch=false` (Vitest). Una sola: `--include <ruta del spec>`.
-  `tabs.page.spec.ts` falla desde aca38fb (le falta `provideRouter([])`), pendiente de arreglar.
+  Estado: 15/15 pruebas pasan. Las pruebas de paginas con ion-router-outlet necesitan
+  `provideRouter([])` en `TestBed.configureTestingModule`.
 - `@capacitor/preferences` 8.0.1 (exacta) instalada.
 - `models/respuesta-api.model.ts`: `RespuestaExito<T>`, `RespuestaError`, `SesionIniciada`.
 - `services/mensaje-error.ts`: `mensajeDeError(error)` -> texto para el usuario (status 0 =
@@ -193,5 +195,5 @@ J. 21. README.md.  22. Capturas, video (<= 5 min) y evidencia de prompts.
   profesor era identico al 3; se detecto y se aclaro con el usuario.
 - 29/10/2026: `tsc` dio OK pero no revisaba AuthService (no alcanzable desde main.ts); se
   detecto y se probo con Vitest. Al correr las pruebas aparecio que tabs.page.spec.ts ya
-  fallaba desde aca38fb (falta provideRouter). npm 11 muestra avisos `install-scripts` de
+  fallaba desde aca38fb (falta provideRouter); se arreglo en un commit aparte. npm 11 muestra avisos `install-scripts` de
   paquetes ya existentes (esbuild, lmdb); no afectan la compilacion.
